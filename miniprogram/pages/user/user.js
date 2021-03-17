@@ -1,5 +1,6 @@
 // miniprogram/pages/user/user.js
 const db = wx.cloud.database();
+//初始化数据库
 const app = getApp();
 Page({
 

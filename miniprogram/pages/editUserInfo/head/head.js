@@ -81,6 +81,7 @@ Page({
       }
     })
   },
+  //云存储，进行图片上传
   handleBtn() {
     wx.showLoading({
       title: '上传中',

@@ -9,6 +9,7 @@ const _ = db.command
 
 // 云函数入口函数
 exports.main = async(event, context) => {
+  // return db.collection('ahf').get()
   try {
     if (typeof event.data == 'string') {
       event.data = eval('(' + event.data + ')') //将字符串转换成js
@@ -35,3 +36,6 @@ exports.main = async(event, context) => {
     console.error(e)
   }
 }
+
+
+
