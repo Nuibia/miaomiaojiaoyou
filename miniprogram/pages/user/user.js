@@ -1,6 +1,7 @@
 // miniprogram/pages/user/user.js
-const db = wx.cloud.database();
 //初始化数据库
+const db = wx.cloud.database();
+
 const app = getApp();
 Page({
 
@@ -27,6 +28,7 @@ Page({
    */
   onReady: function() {
     this.getLocation();
+    //云调用，使用自己写的login云函数
     wx.cloud.callFunction({
       name: 'login',
       data: {}
@@ -117,6 +119,7 @@ Page({
           friendList:[],
         }
       }).then(res => {
+        //查找
         db.collection('users').doc(res._id).get().then(res => {
           app.userInfo = Object.assign(app.userInfo, res.data);
           this.setData({
@@ -130,6 +133,7 @@ Page({
     }
   },
   getMessage(){
+    //查找
     db.collection('message').where({
       userId:app.userInfo._id
     }).watch({

@@ -100,6 +100,7 @@ Page({
               title: '已经申请',
             });
           } else {
+            //调用自己的部署好的云函数
             wx.cloud.callFunction({
               name: 'update',
               data: {

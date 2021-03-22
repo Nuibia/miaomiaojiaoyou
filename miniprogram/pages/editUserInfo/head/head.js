@@ -73,6 +73,7 @@ Page({
       sizeType: ['compressed'],
       sourceType: ['album', 'camera'],
       success: res => {
+        console.log(res);
         // tempFilePath可以作为img标签的src属性显示图片
         const tempFilePaths = res.tempFilePaths[0];
         this.setData({
@@ -81,7 +82,8 @@ Page({
       }
     })
   },
-  //云存储，进行图片上传
+  //云存储，进行图片上传  
+  //需要先点击头像上传图片
   handleBtn() {
     wx.showLoading({
       title: '上传中',
@@ -93,6 +95,7 @@ Page({
     }).then(res => {
       let fileID = res.fileID;
       if (fileID) {
+        //修改方法
         db.collection('users').doc(app.userInfo._id).update({
           data: {
             userPhoto: fileID

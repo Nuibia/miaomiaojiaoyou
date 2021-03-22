@@ -67,13 +67,19 @@ Page({
   onShareAppMessage: function() {
 
   },
+  //点赞方法
   handleLinks(ev) {
     let id = ev.target.dataset.id //自定义属性
+    console.log("id",id);
     wx.cloud.callFunction({
+      //使用哪个方法
       name: 'update',
       data: {
+        //哪个集合（表）
         collection: 'users',
+        //精准查询到那一条
         doc: id,
+        //使用db.command 点击一次+1
         data: "{links:_.inc(1)}"
       }
     }).then(res => {
@@ -93,6 +99,7 @@ Page({
 
     })
   },
+  //好友列表展示方法：当current为links，按照点赞数，当为time时，按照最新时间展示
   handleCurrent(ev) {
     let current = ev.target.dataset.current;
     if (current == this.data.current) {
@@ -104,6 +111,7 @@ Page({
       this.getListData();
     });
   },
+  //获取好友列表信息
   getListData() {
     db.collection('users').field({
       userPhoto: true,
@@ -115,12 +123,14 @@ Page({
       })
     })
   },
+  //跳转到详情
   handleDetail(ev){
     let id=ev.target.dataset.id;
     wx.navigateTo({
       url: '/pages/detail/detail?userId='+id,
     })
   },
+  //获取轮播图
   getBannerList(){
 db.collection('banner').get().then((res)=>{
   this.setData({

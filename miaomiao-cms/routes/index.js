@@ -23,6 +23,7 @@ router.post('/uploadBannerImg', async (ctx, next) => {
   var file = files.file;
   try {
     let options = {
+      //获取access_token值
       uri: 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=' + config.appid + '&secret=' + config.secret + '',
       json: true
     }
@@ -32,16 +33,19 @@ router.post('/uploadBannerImg', async (ctx, next) => {
 
     options = {
       method: 'POST',
+      //调用云存储相关，上传图片
       uri: 'https://api.weixin.qq.com/tcb/uploadfile?access_token=' + access_token + '',
       body: {
+        //环境名字
         "env": 'ahf-oz31v',
+        //路径名字
         "path": filePath,
       },
       json: true,
     }
     let res = await request(options);
     let file_id = res.file_id;
-//云数据库插入
+//云数据库插入 云存储是以file_id当做路径的，而不是url
     options = {
       method: 'POST',
       uri: ' https://api.weixin.qq.com/tcb/databaseadd?access_token=' + access_token + '',
@@ -52,25 +56,6 @@ router.post('/uploadBannerImg', async (ctx, next) => {
       json: true
     }
 
-    await request(options)
-//云数据库添加
-    options = {
-      method: 'POST',
-      uri: res.url,
-      formData: {
-        "Signature": res.authorization,
-        "key": filePath,
-        "x-cos-security-token": res.token,
-        "x-cos-meta-fileid": res.cos_file_id,
-        "file": {
-          value: fs.createReadStream(file.path),
-          options: {
-            filename: fileName,
-            contentType: file.type
-          }
-        }
-      }
-    }
     await request(options)
     ctx.body = res;
   } catch (err) {
